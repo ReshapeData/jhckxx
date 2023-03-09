@@ -1,20 +1,20 @@
 # 0.01 add the 1st msg notification Menu----
 headerMsg1<-  dropdownMenu(type = "messages",
                            messageItem(
-                             from = "人力资源部",
-                             message = "7月工资表已完成计算"
+                             from = msg[[1]]$from,
+                             message = msg[[1]]$message
                            ),
                            messageItem(
-                             from = "数据部",
-                             message = "HR功能已更新到V2",
-                             icon = icon("question"),
-                             time = "13:45"
+                             from = msg[[2]]$from,
+                             message = msg[[2]]$message,
+                             icon = icon(msg[[2]]$icon),
+                             time = msg[[2]]$time
                            ),
                            messageItem(
-                             from = "技术支持",
-                             message = "新的HR数据中台已上线.",
-                             icon = icon("life-ring"),
-                             time = "2019-08-26"
+                             from = msg[[3]]$from,
+                             message = msg[[3]]$message,
+                             icon = icon(msg[[3]]$icon),
+                             time = msg[[3]]$time
                            )
 );
 

@@ -3,24 +3,24 @@
 enableBookmarking(store = "url")
 library(shiny);
 library(shinydashboard);
-library(recharts);
-library(leaflet);
-library(dygraphs);
+library(tsda);
+library(tsdo);
+library(tsui);
 
 # 设置引入页-----
+source('00_data.R',encoding = 'utf-8');
 source('topbarMenu.R',encoding = 'utf-8');
 source('sideBarSetting.R',encoding = 'utf-8');
-source('sysSetting_body.R',encoding = 'utf-8');
-source('checkOn_body.R',encoding = 'utf-8');
-source('buKa_body.R',encoding = 'utf-8');
-source('chuChai_body.R',encoding = 'utf-8');
-source('waiChu_body.R',encoding = 'utf-8');
-source('jiaBan_body.R',encoding = 'utf-8');
-source('qingJia_body.R',encoding = 'utf-8');
-source('exportData_body.R',encoding = 'utf-8');
+source('01_row_body.R',encoding = 'utf-8');
+source('02_column_body.R',encoding = 'utf-8');
+source('03_book_body.R',encoding = 'utf-8');
+source('04_series_body.R',encoding = 'utf-8');
+source('05_majority_body.R',encoding = 'utf-8');
+source('06_tutor_body.R',encoding = 'utf-8');
+source('99_sysSetting_body.R',encoding = 'utf-8');
 source('workAreaSetting.R',encoding = 'utf-8');
-source('data.R',encoding = 'utf-8');
-#设置表体的菜单
+
+
 
 
 

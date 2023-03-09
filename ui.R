@@ -7,11 +7,11 @@ shinyUI(dashboardPage(skin = "blue",
                     
                 
                     
-                    dashboardHeader(title = "网商HR数据中台",
+                    dashboardHeader(title = app_title,titleWidth = '300px',
                                    
                                     headerMsg1,
                                     dynamicMsgMenu,
-                                    NotiMenuObj,
+                                   # NotiMenuObj,
                                     disable = F
                     ),
                     
@@ -23,7 +23,8 @@ shinyUI(dashboardPage(skin = "blue",
                     
                     #ui.body----
                     dashboardBody(
-                      workAreaSetting
+                      workAreaSetting,
+                      tsui::use_pop(),
                     )
 )
 )
