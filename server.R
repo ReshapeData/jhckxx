@@ -23,7 +23,7 @@
      #显示列表
      tsui::run_dataTable2(id = 'dt_expInfo',data = data)
      #上传服务器
-     tsda::db_writeTable2(token = '75CE5B94-38F1-40F6-9B7B-9B4170C8E5F6',table_name = 'RDS_JH_view_ExportDeclaration',r_object = data,append = TRUE)
+     tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_view_ExportDeclaration',r_object = data,append = TRUE)
      
      
      
@@ -43,18 +43,20 @@
      sql ="SELECT F_QH_DECLARATIONNUMBER,
             			FCONTRACTNO ,
             			F_QH_EXPORTDATE 
-      FROM RDS_JH_ExportDeclaration"
-     data = tsda::sql_select2(token = '75CE5B94-38F1-40F6-9B7B-9B4170C8E5F6',sql = sql)
+           FROM RDS_JH_ExportDeclaration"
+     data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
      print(data)
      
      #update age
      
-     sql_update = "UPDATE A  SET A.F_QH_EXPORTDATE = B.出口日期,
-              		 A.F_QH_DECLARATIONNUMBER = B.出口报关单号
-              		FROM RDS_JH_ExportDeclaration_1 A
-              		INNER JOIN  RDS_JH_view_ExportDeclaration  B
-              		ON  A.FCONTRACTNO = B.合同号 "
-     tsda::sql_update2(token = '75CE5B94-38F1-40F6-9B7B-9B4170C8E5F6',sql_str = sql_update)
+     sql_update = "
+                  UPDATE A  SET A.F_QH_EXPORTDATE = B.出口日期,
+            		 A.F_QH_DECLARATIONNUMBER = B.出口报关单号
+            		FROM T_SAL_OUTSTOCK A
+            		INNER JOIN  RDS_JH_view_ExportDeclaration  B
+            		ON  A.FCONTRACTNO = B.合同号 
+                 "
+     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
      
      tsui::pop_notice('更新已成功')
      
