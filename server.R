@@ -40,10 +40,22 @@
      
      #code here
      #begin
-     sql ="SELECT F_QH_DECLARATIONNUMBER,
-            			FCONTRACTNO ,
-            			F_QH_EXPORTDATE 
-           FROM RDS_JH_ExportDeclaration"
+     sql ="select F_QH_DECLARATIONNUMBER,substring(FCONTRACTNO,0,CHARINDEX('&',FCONTRACTNO))    as FCONTRACTNO
+      		 ,F_QH_EXPORTDATE
+      		from RDS_JH_ExportDeclaration  where len(FCONTRACTNO) > 16
+      		union
+      		select F_QH_DECLARATIONNUMBER ,
+      		 substring(FCONTRACTNO,CHARINDEX('&',FCONTRACTNO)+1,len(FCONTRACTNO)-CHARINDEX('&',FCONTRACTNO))   as FCONTRACTNO
+      		 ,	F_QH_EXPORTDATE
+      		from RDS_JH_ExportDeclaration  where len(FCONTRACTNO) > 16
+      		union
+      		    SELECT 
+      			F_QH_DECLARATIONNUMBER,
+      			FCONTRACTNO,
+      			F_QH_EXPORTDATE			
+      			FROM RDS_JH_ExportDeclaration
+      			where len(FCONTRACTNO) < 17
+     "
      data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
      print(data)
      
