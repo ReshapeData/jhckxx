@@ -23,7 +23,7 @@
      #显示列表
      tsui::run_dataTable2(id = 'dt_expInfo',data = data)
      #上传服务器
-     tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_view_ExportDeclaration',r_object = data,append = TRUE)
+     tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
      
      
      
@@ -76,7 +76,7 @@
                   UPDATE A  SET A.F_QH_EXPORTDATE = B.出口日期,
             		 A.F_QH_DECLARATIONNUMBER = B.出口报关单号
             		FROM T_SAL_OUTSTOCK A
-            		INNER JOIN  RDS_JH_ODS_ExportDeclaration  B
+            		INNER JOIN  RDS_JH_view_ExportDeclaration  B
             		ON  A.FCONTRACTNO = B.合同号 
             		where A.F_QH_DECLARATIONNUMBER <> B.出口报关单号
                  "
