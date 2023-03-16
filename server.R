@@ -55,6 +55,7 @@
             		FROM T_SAL_OUTSTOCK A
             		INNER JOIN  RDS_JH_view_ExportDeclaration  B
             		ON  A.FCONTRACTNO = B.合同号 
+            		where A.F_QH_DECLARATIONNUMBER <> B.出口报关单号
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
      
