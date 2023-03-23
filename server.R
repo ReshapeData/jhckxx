@@ -24,7 +24,9 @@
      tsui::run_dataTable2(id = 'dt_expInfo',data = data)
      #上传服务器
      tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
-     
+     # #数据处理
+     #tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ODS_ExportDeclaration',r_object = data1,append = FALSE)
+     # 
      
      
      #end
@@ -40,47 +42,79 @@
      
      #code here
      #begin
-     sql ="    SELECT 
+     sql =" SELECT 
       			F_QH_DECLARATIONNUMBER,
       			FCONTRACTNO,
-      			F_QH_EXPORTDATE			
+      			F_QH_EXPORTDATE,
+      			FBILLNO
       			FROM RDS_JH_ExportDeclaration     "
      data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
      print(data)
      
      #insert 
      sql_insert = "
-          INSERT  INTO RDS_JH_ODS_ExportDeclaration  
-			 select F_QH_DECLARATIONNUMBER,LTRIM(substring(FCONTRACTNO,0,CHARINDEX('&',FCONTRACTNO)) )   as FCONTRACTNO
-		 ,F_QH_EXPORTDATE
-		from RDS_JH_ExportDeclaration  where len(FCONTRACTNO) > 16
-		union
-		select F_QH_DECLARATIONNUMBER ,
-		 LTRIM(substring(FCONTRACTNO,CHARINDEX('&',FCONTRACTNO)+1,len(FCONTRACTNO)-CHARINDEX('&',FCONTRACTNO)))   as FCONTRACTNO
-		 ,	F_QH_EXPORTDATE
-		from RDS_JH_ExportDeclaration  where len(FCONTRACTNO) > 16
-		union
+        INSERT  INTO RDS_JH_ODS_ExportDeclaration  
+
+			select  F_QH_DECLARATIONNUMBER,
+			  FCONTRACTNO,
+		  	  F_QH_EXPORTDATE ,FBILLNO ,FDATE 
+			from  
+			( select F_QH_DECLARATIONNUMBER,LTRIM(substring(FCONTRACTNO,0,CHARINDEX('&',FCONTRACTNO)) )   as FCONTRACTNO
+		    ,F_QH_EXPORTDATE,FBILLNO
+		    ,getdate() as FDATE
+		    from RDS_JH_ExportDeclaration  where FCONTRACTNO like  '%&%'
+		    union
+		    select F_QH_DECLARATIONNUMBER ,
+		    LTRIM(substring(FCONTRACTNO,CHARINDEX('&',FCONTRACTNO)+1,len(FCONTRACTNO)-CHARINDEX('&',FCONTRACTNO)))   as FCONTRACTNO
+		    ,F_QH_EXPORTDATE,FBILLNO,getdate() as FDATE
+		    from RDS_JH_ExportDeclaration  where FCONTRACTNO like  '%&%'
+		    union
 		    SELECT 
-			F_QH_DECLARATIONNUMBER,
+		  	F_QH_DECLARATIONNUMBER,
 			FCONTRACTNO,
-			F_QH_EXPORTDATE			
-			FROM RDS_JH_ExportDeclaration
-			where len(FCONTRACTNO) < 17 
+		  	F_QH_EXPORTDATE	,FBILLNO ,getdate() as FDATE
+		    FROM RDS_JH_ExportDeclaration
+		  	where FCONTRACTNO not like  '%&%')   A
+			WHERE NOT EXISTS  
+			(SELECT F_QH_DECLARATIONNUMBER,
+			  FCONTRACTNO,
+		  	  F_QH_EXPORTDATE ,FBILLNO ,FDATE 
+			 FROM  RDS_JH_ODS_ExportDeclaration B
+			 WHERE  A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER
+			  AND A.FCONTRACTNO = B.FCONTRACTNO
+		  	  AND A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE
+			  AND A.FBILLNO =  B.FBILLNO 
+			   )
                  
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
      
+     #update age1
+     
+     sql_update1 = "
+                  UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
+            			A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER
+            			FROM T_SAL_OUTSTOCK A
+            			INNER JOIN  RDS_JH_ExportDeclaration  B
+            			ON  A.FCONTRACTNO = B.FCONTRACTNO
+                 "
+     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
+  
+     #end
+     
      #update age
      
      sql_update = "
-                  UPDATE A  SET A.F_QH_EXPORTDATE = B.出口日期,
-            		 A.F_QH_DECLARATIONNUMBER = B.出口报关单号
-            		FROM T_SAL_OUTSTOCK A
-            		INNER JOIN  RDS_JH_view_ExportDeclaration  B
-            		ON  A.FCONTRACTNO = B.合同号 
+                 UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
+            			A.F_QH_DECLARATIONNUMBER = 	B.F_QH_DECLARATIONNUMBER			
+            			FROM T_SAL_OUTSTOCK  A
+            			INNER JOIN  RDS_JH_ExportDeclaration  B
+            			ON  A.FCONTRACTNO = B.FCONTRACTNO 
+            			AND A.FBILLNO = B.FBILLNO
+            			and A.FCONTRACTNO <> ' '
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
-     
+
      tsui::pop_notice('更新已成功')
      
      #end
