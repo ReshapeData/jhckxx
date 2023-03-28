@@ -24,9 +24,7 @@
      tsui::run_dataTable2(id = 'dt_expInfo',data = data)
      #上传服务器
      tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
-     # #数据处理
-     #tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ODS_ExportDeclaration',r_object = data1,append = FALSE)
-     # 
+     #  
      
      
      #end
@@ -47,17 +45,15 @@
       			FCONTRACTNO,
       			F_QH_EXPORTDATE,
       			FBILLNO
-      			FROM RDS_JH_ExportDeclaration     "
+      			FROM RDS_JH_ExportDeclaration "
      data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
      print(data)
      
      #insert 
      sql_insert = "
         INSERT  INTO RDS_JH_ODS_ExportDeclaration  
-
 			select  F_QH_DECLARATIONNUMBER,
-			  FCONTRACTNO,
-		  	  F_QH_EXPORTDATE ,FBILLNO ,FDATE 
+			  FCONTRACTNO, F_QH_EXPORTDATE ,FBILLNO ,FDATE 
 			from  
 			( select F_QH_DECLARATIONNUMBER,LTRIM(substring(FCONTRACTNO,0,CHARINDEX('&',FCONTRACTNO)) )   as FCONTRACTNO
 		    ,F_QH_EXPORTDATE,FBILLNO
@@ -76,15 +72,13 @@
 		    FROM RDS_JH_ExportDeclaration
 		  	where FCONTRACTNO not like  '%&%')   A
 			WHERE NOT EXISTS  
-			(SELECT F_QH_DECLARATIONNUMBER,
-			  FCONTRACTNO,
+			(SELECT F_QH_DECLARATIONNUMBER,  FCONTRACTNO,
 		  	  F_QH_EXPORTDATE ,FBILLNO ,FDATE 
 			 FROM  RDS_JH_ODS_ExportDeclaration B
 			 WHERE  A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER
 			  AND A.FCONTRACTNO = B.FCONTRACTNO
 		  	  AND A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE
-			  AND A.FBILLNO =  B.FBILLNO 
-			   )
+			  	   )
                  
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
@@ -97,6 +91,8 @@
             			FROM T_SAL_OUTSTOCK A
             			INNER JOIN  RDS_JH_ExportDeclaration  B
             			ON  A.FCONTRACTNO = B.FCONTRACTNO
+            			WHERE B.FBILLNO IS NOT NULL
+            		
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
   
@@ -105,13 +101,15 @@
      #update age
      
      sql_update = "
-                 UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
-            			A.F_QH_DECLARATIONNUMBER = 	B.F_QH_DECLARATIONNUMBER			
+                  UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
+            		 	A.F_QH_DECLARATIONNUMBER = 	B.F_QH_DECLARATIONNUMBER			
             			FROM T_SAL_OUTSTOCK  A
-            			INNER JOIN  RDS_JH_ExportDeclaration  B
+            			INNER JOIN  RDS_JH_ODS_ExportDeclaration   B
             			ON  A.FCONTRACTNO = B.FCONTRACTNO 
             			AND A.FBILLNO = B.FBILLNO
             			and A.FCONTRACTNO <> ' '
+					      	WHERE B.FBILLNO IS  NULL
+						      OR  B.FBILLNO = ' '	
                  "
      tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
 
