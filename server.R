@@ -23,7 +23,7 @@ shinyServer(function(input, output,session) {
     #显示列表
     tsui::run_dataTable2(id = 'dt_expInfo',data = data)
     #上传服务器
-    tsda::db_writeTable2(token = 'F91CF3E3-8962-47F2-823F-C5CCAAFC66CA',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
+    tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
     #  
     
     
@@ -47,7 +47,7 @@ shinyServer(function(input, output,session) {
       			FBILLNO
       			FROM RDS_JH_ExportDeclaration 
           "
-    data = tsda::sql_select2(token = 'F91CF3E3-8962-47F2-823F-C5CCAAFC66CA',sql = sql)
+    data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
     print(data)
     
     #insert 
@@ -82,7 +82,7 @@ shinyServer(function(input, output,session) {
 		  	  AND A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE
 			  	   )
              "
-    tsda::sql_update2(token = 'F91CF3E3-8962-47F2-823F-C5CCAAFC66CA',sql_str = sql_insert)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
     
     #update age1
     
@@ -95,9 +95,9 @@ shinyServer(function(input, output,session) {
             			AND A.FBILLNO = B.FBILLNO
             			and A.FCONTRACTNO <> ' '
 					      	WHERE B.FBILLNO IS not NULL
-						      OR  B.FBILLNO = ' '	
+						      
                  "
-    tsda::sql_update2(token = 'F91CF3E3-8962-47F2-823F-C5CCAAFC66CA',sql_str = sql_update1)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
     
     #end
     
@@ -110,8 +110,9 @@ shinyServer(function(input, output,session) {
               			INNER JOIN  RDS_JH_ODS_ExportDeclaration B
               			ON  A.FCONTRACTNO = B.FCONTRACTNO
               			WHERE B.FBILLNO IS  NULL
+              			OR  B.FBILLNO = ' '	
                  "
-    tsda::sql_update2(token = 'F91CF3E3-8962-47F2-823F-C5CCAAFC66CA',sql_str = sql_update)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
     
     tsui::pop_notice('更新已成功')
     
