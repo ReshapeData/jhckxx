@@ -6,7 +6,8 @@ menu_row <- tabItem(tabName = "row",
                                tsui::uiTemplate(templateName = '出口报关单导入模板'),
                                tsui::mdl_file(id = 'file_expInfo',label ='请上传出口信息表' ),
                                tagList(   shiny::actionButton(inputId = 'btn_preview',label = '预览'),
-                                          shiny::actionButton(inputId = 'btn_update',label = '更新ERP'))
+                                          shiny::actionButton(inputId = 'btn_update',label = '更新ERP'),
+                                          shiny::actionButton(inputId = 'btn_truncate',label = '清空旧表')   )
                             
                              )
                              # ,

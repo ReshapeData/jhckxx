@@ -25,31 +25,6 @@ shinyServer(function(input, output,session) {
     #上传服务器
     tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
     #  
-    
-    
-    #end
-    
-  })
-  
-  #end of preview---------
-  
-  
-  #update_erp--------
-  
-  shiny::observeEvent(input$btn_update,{
-    
-    #code here
-    #begin
-    sql =" SELECT 
-      			F_QH_DECLARATIONNUMBER,
-      			FCONTRACTNO,
-      			F_QH_EXPORTDATE,
-      			FBILLNO
-      			FROM RDS_JH_ExportDeclaration 
-          "
-    data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
-    print(data)
-    
     #insert 
     sql_insert = "
        INSERT  INTO RDS_JH_ODS_ExportDeclaration 
@@ -71,7 +46,7 @@ shinyServer(function(input, output,session) {
 			FCONTRACTNO,
 		  	F_QH_EXPORTDATE	,FBILLNO ,getdate() as FDATE
 		    FROM RDS_JH_ExportDeclaration
-		  	where FCONTRACTNO not like  '%&%')   A
+		  	where FCONTRACTNO not like  '%&%' or FCONTRACTNO is null  )   A
 			WHERE NOT EXISTS  
 			(SELECT F_QH_DECLARATIONNUMBER,
 			  FCONTRACTNO,
@@ -84,6 +59,46 @@ shinyServer(function(input, output,session) {
              "
     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
     
+   
+    
+    #end
+    
+  })
+  #end of preview---------
+ 
+  shiny::observeEvent(input$btn_truncate,{
+    
+    #code here
+    #begin
+    #truncate 
+    sql_truncate =" TRUNCATE TABLE RDS_JH_ExportDeclaration  
+          "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate)
+    #truncate2 
+    sql_truncate2 =" TRUNCATE TABLE RDS_JH_ODS_ExportDeclaration  
+          "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate2)
+    })
+  
+  #update_erp--------
+  
+  shiny::observeEvent(input$btn_update,{
+    
+    #code here
+    #begin
+    sql =" SELECT 
+      			F_QH_DECLARATIONNUMBER,
+      			FCONTRACTNO,
+      			F_QH_EXPORTDATE,
+      			FBILLNO
+      			FROM RDS_JH_ExportDeclaration 
+          "
+    data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
+    print(data)
+   
+   
+    
+   
     #update age1
     
     sql_update1 = "
