@@ -102,15 +102,12 @@ shinyServer(function(input, output,session) {
     #update age1
     
     sql_update1 = "
-                 UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
+                  UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
             			A.F_QH_DECLARATIONNUMBER = 	B.F_QH_DECLARATIONNUMBER			
             			FROM T_SAL_OUTSTOCK  A
             			INNER JOIN  RDS_JH_ODS_ExportDeclaration   B
-            			ON  A.FCONTRACTNO = B.FCONTRACTNO 
-            			AND A.FBILLNO = B.FBILLNO
-            			and A.FCONTRACTNO <> ' '
-					      	WHERE B.FBILLNO IS not NULL
-						      
+            			ON   A.FBILLNO = B.FBILLNO
+					        WHERE B.FBILLNO IS not NULL
                  "
     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
     
@@ -138,8 +135,4 @@ shinyServer(function(input, output,session) {
   
   #end of update erp-----
   
-  
-  
-  
-  
-})
+  })
