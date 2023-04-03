@@ -97,32 +97,9 @@ shinyServer(function(input, output,session) {
     print(data)
    
    
-    
-   
-    #update age1
-    
-    sql_update1 = "
-                  UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
-            			A.F_QH_DECLARATIONNUMBER = 	B.F_QH_DECLARATIONNUMBER			
-            			FROM T_SAL_OUTSTOCK  A
-            			INNER JOIN  RDS_JH_ODS_ExportDeclaration   B
-            			ON   A.FBILLNO = B.FBILLNO
-					        WHERE B.FBILLNO IS not NULL
-                 "
-    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
-    
-    #end
-    
     #update age
     
-    sql_update = "
-                     UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,
-              			A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER
-              			FROM T_SAL_OUTSTOCK A
-              			INNER JOIN  RDS_JH_ODS_ExportDeclaration B
-              			ON  A.FCONTRACTNO = B.FCONTRACTNO
-              			WHERE B.FBILLNO IS  NULL
-              			OR  B.FBILLNO = ' '	
+    sql_update = "UpdateData_JH
                  "
     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update)
     
