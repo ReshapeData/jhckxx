@@ -89,6 +89,7 @@ shinyServer(function(input, output,session) {
     sql_truncate2 =" TRUNCATE TABLE RDS_JH_ODS_ExportDeclaration  
           "
     tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql = sql_truncate2)
+    tsui::pop_notice("清除完成")
   })
   
   #update_erp--------
@@ -110,15 +111,26 @@ shinyServer(function(input, output,session) {
     
     #update age
     
-    sql_update0 = "UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,      A.F_QH_DECLARATIONNUMBER =  B.F_QH_DECLARATIONNUMBER ,
-		        A.F_NLJ_CJFS=B.F_NLJ_CJFS,  A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,	A.F_NLJ_WBJE=B.F_NLJ_WBJE,A.F_NLJ_WBHL=B.F_NLJ_WBHL
-                    FROM T_SAL_OUTSTOCK  A      INNER JOIN  RDS_JH_ODS_ExportDeclaration   B      ON   A.FBILLNO = B.FBILLNO  
+    sql_update0 = "UPDATE  
+    A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,     
+    A.F_QH_DECLARATIONNUMBER =  B.F_QH_DECLARATIONNUMBER ,
+    A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1,
+		        A.F_NLJ_CJFS=B.F_NLJ_CJFS,  A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,
+		        A.F_NLJ_WBJE=B.F_NLJ_WBJE,A.F_NLJ_WBHL=B.F_NLJ_WBHL
+                    FROM T_SAL_OUTSTOCK  A    
+                    INNER JOIN  RDS_JH_ODS_ExportDeclaration   B    
+                    ON   A.FBILLNO = B.FBILLNO  
                  "
     tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql_str = sql_update0)
-    sql_update1="UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,      A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER   ,
-		            A.F_NLJ_CJFS=B.F_NLJ_CJFS,			A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,A.F_NLJ_WBJE=B.F_NLJ_WBJE,				A.F_NLJ_WBHL=B.F_NLJ_WBHL
+    sql_update1="UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,    
+    A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER   ,
+		            A.F_NLJ_CJFS=B.F_NLJ_CJFS,		
+		            A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,A.F_NLJ_WBJE=B.F_NLJ_WBJE,		
+		            A.F_NLJ_WBHL=B.F_NLJ_WBHL
 
-	        FROM T_SAL_OUTSTOCK A      INNER JOIN  RDS_JH_ODS_ExportDeclaration B      ON  A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1   "
+	        FROM T_SAL_OUTSTOCK A      
+    INNER JOIN  RDS_JH_ODS_ExportDeclaration B      
+    ON  A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1   "
     tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql_str = sql_update1)
     
     tsui::pop_notice('更新已成功')
