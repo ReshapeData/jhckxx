@@ -25,7 +25,7 @@ shinyServer(function(input, output,session) {
     tsui::run_dataTable2(id = 'dt_expInfo',data = data)
     #上传服务器----------------
     #src表：RDS_JH_ExportDeclaration-----------
-    tsda::db_writeTable2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
+    tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
     #
     #insert
     #把src表插入ods表---------------
@@ -68,7 +68,7 @@ shinyServer(function(input, output,session) {
 			 AND A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1
 		   AND A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE
 		   AND A.FBILLNO=B.FBILLNO)"
-    tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql_str = sql_insert)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
 
 
 
@@ -84,11 +84,12 @@ shinyServer(function(input, output,session) {
     #truncate 
     sql_truncate =" TRUNCATE TABLE RDS_JH_ExportDeclaration  
           "
-    tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql = sql_truncate)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate)
     #truncate2 
     sql_truncate2 =" TRUNCATE TABLE RDS_JH_ODS_ExportDeclaration  
           "
-    tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql = sql_truncate2)
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate2)
+    tsui::pop_notice("清除完成")
   })
   
   #update_erp--------
@@ -104,22 +105,33 @@ shinyServer(function(input, output,session) {
     #   			FBILLNO
     #   			FROM RDS_JH_ExportDeclaration 
     #       "
-    # data = tsda::sql_select2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql = sql)
+    # data = tsda::sql_select2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql)
     # print(data)
     
     
     #update age
     
-    sql_update0 = "UPDATE  A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,      A.F_QH_DECLARATIONNUMBER =  B.F_QH_DECLARATIONNUMBER ,
-		        A.F_NLJ_CJFS=B.F_NLJ_CJFS,  A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,	A.F_NLJ_WBJE=B.F_NLJ_WBJE,A.F_NLJ_WBHL=B.F_NLJ_WBHL
-                    FROM T_SAL_OUTSTOCK  A      INNER JOIN  RDS_JH_ODS_ExportDeclaration   B      ON   A.FBILLNO = B.FBILLNO  
+    sql_update0 = "UPDATE  
+    A SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,     
+    A.F_QH_DECLARATIONNUMBER =  B.F_QH_DECLARATIONNUMBER ,
+    A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1,
+		        A.F_NLJ_CJFS=B.F_NLJ_CJFS,  A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,
+		        A.F_NLJ_WBJE=B.F_NLJ_WBJE,A.F_NLJ_WBHL=B.F_NLJ_WBHL
+                    FROM T_SAL_OUTSTOCK  A    
+                    INNER JOIN  RDS_JH_ODS_ExportDeclaration   B    
+                    ON   A.FBILLNO = B.FBILLNO  
                  "
-    tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql_str = sql_update0)
-    sql_update1="UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,      A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER   ,
-		            A.F_NLJ_CJFS=B.F_NLJ_CJFS,			A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,A.F_NLJ_WBJE=B.F_NLJ_WBJE,				A.F_NLJ_WBHL=B.F_NLJ_WBHL
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update0)
+    sql_update1="UPDATE A  SET A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE,    
+    A.F_QH_DECLARATIONNUMBER = B.F_QH_DECLARATIONNUMBER   ,
+		            A.F_NLJ_CJFS=B.F_NLJ_CJFS,		
+		            A.F_NLJ_CJBZ=B.F_NLJ_CJBZ,A.F_NLJ_WBJE=B.F_NLJ_WBJE,		
+		            A.F_NLJ_WBHL=B.F_NLJ_WBHL
 
-	        FROM T_SAL_OUTSTOCK A      INNER JOIN  RDS_JH_ODS_ExportDeclaration B      ON  A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1   "
-    tsda::sql_update2(token = '6F552F59-802F-4BBD-83C5-E3E5DE72A834',sql_str = sql_update1)
+	        FROM T_SAL_OUTSTOCK A      
+    INNER JOIN  RDS_JH_ODS_ExportDeclaration B      
+    ON  A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1   "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
     
     tsui::pop_notice('更新已成功')
     
