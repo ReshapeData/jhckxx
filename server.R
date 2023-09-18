@@ -23,13 +23,43 @@ shinyServer(function(input, output,session) {
     # print(data)
     #显示列表-----------------
     tsui::run_dataTable2(id = 'dt_expInfo',data = data)
+    
+    
+    
+    
+  })
+  #end of preview---------
+  
+  shiny::observeEvent(input$btn_truncate,{
+    
+    #code here
+    #begin
+    #truncate 
+    sql_truncate =" TRUNCATE TABLE RDS_JH_ExportDeclaration  
+          "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate)
+    #truncate2 
+    sql_truncate2 =" TRUNCATE TABLE RDS_JH_ODS_ExportDeclaration  
+          "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate2)
+    tsui::pop_notice("清除完成")
+  })
+  
+  #update_erp--------
+  
+  shiny::observeEvent(input$btn_update,{
+    
+    file_name = var_file_expInfo()
+    # library(readxl)
+    #读取excel------------------------------
+    data <- readxl::read_excel(file_name)
     #上传服务器----------------
     #src表：RDS_JH_ExportDeclaration-----------
     tsda::db_writeTable2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',table_name = 'RDS_JH_ExportDeclaration',r_object = data,append = TRUE)
     #
     #insert
     #把src表插入ods表---------------
-
+    
     #添加了日期字段，对合同号字段进行了处理
     #新加的字段放在FBILLNO后面
     sql_insert = "
@@ -69,32 +99,10 @@ shinyServer(function(input, output,session) {
 		   AND A.F_QH_EXPORTDATE = B.F_QH_EXPORTDATE
 		   AND A.FBILLNO=B.FBILLNO)"
     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_insert)
-
-
-
+    
+    
+    
     #end
-    
-  })
-  #end of preview---------
-  
-  shiny::observeEvent(input$btn_truncate,{
-    
-    #code here
-    #begin
-    #truncate 
-    sql_truncate =" TRUNCATE TABLE RDS_JH_ExportDeclaration  
-          "
-    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate)
-    #truncate2 
-    sql_truncate2 =" TRUNCATE TABLE RDS_JH_ODS_ExportDeclaration  
-          "
-    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql = sql_truncate2)
-    tsui::pop_notice("清除完成")
-  })
-  
-  #update_erp--------
-  
-  shiny::observeEvent(input$btn_update,{
     
     #code here
     #begin
@@ -132,6 +140,20 @@ shinyServer(function(input, output,session) {
     INNER JOIN  RDS_JH_ODS_ExportDeclaration B      
     ON  A.F_QH_DECLARATIONNUMBER1 = B.F_QH_DECLARATIONNUMBER1   "
     tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update1)
+    
+    sql_update3="update a set 
+                  a.F_NLJ_YSBGDH=b.F_QH_DECLARATIONNUMBER,
+                  a.F_NLJ_YSHTXYH=b.F_QH_DECLARATIONNUMBER1,
+                  a.F_NLJ_YSCKRQ=b.F_QH_EXPORTDATE,
+                  a.F_NLJ_YSCJFS=b.F_NLJ_CJFS,
+                  a.F_NLJ_YSCJBZ=b.F_NLJ_CJBZ,
+                  a.F_NLJ_YSWBJE=b.F_NLJ_WBJE,
+                  a.F_NLJ_YSWBHL=b.F_NLJ_WBHL
+                 from t_AR_receivable a   inner join t_AR_receivableEntry c  
+                 on a.FID=c.FID  inner join T_SAL_OUTSTOCK b
+                  on c.FSOURCEBILLNO=b.FBILLNO
+                                    where b.F_QH_DECLARATIONNUMBER!=' ' "
+    tsda::sql_update2(token = 'C0426D23-1927-4314-8736-A74B2EF7A039',sql_str = sql_update3)
     
     tsui::pop_notice('更新已成功')
     
